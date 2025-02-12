@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Family Members</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
+    <style>
+       body {
+            margin: 0;
+            font-family: 'Poppins', sans-serif;
+            background: url('./download\ \(1\).jpg') no-repeat center center/cover;
+            color: rgba(178, 204, 238, 0.468);
+            line-height: 1.6;
+        }
+
+        /* Header styling */
+        header {
+            background: rgba(178, 204, 238, 0.468);
+            color: #4a4a4a;
+            padding: 30px 10%;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .header-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .header-container h1 {
+            margin: 0;
+            font-size: 3em;
+            font-weight: bold;
+            letter-spacing: 2px;
+        }
+
+        .header-container p {
+            margin: 10px 0;
+            font-size: 1.4em;
+            font-weight: 300;
+        }
+
+        .profile {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            position: relative;
+        }
+
+        .profile img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        .profile span {
+            color: #4a4a4a;
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+
+        .profile-menu {
+            position: absolute;
+            top: 70px;
+            right: 0;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            display: none;
+            flex-direction: column;
+            width: 150px;
+            text-align: left;
+        }
+
+        .profile-menu a {
+            text-decoration: none;
+            color: #2b2728;
+            padding: 10px 15px;
+            font-size: 1em;
+            border-bottom: 1px solid #ddd;
+            transition: background 0.3s ease;
+        }
+
+        .profile-menu a:hover {
+            background: #f4dfba;
+        }
+
+        .show-menu {
+            display: flex;
+        }
+
+        /* Main container */
+        .container {
+            text-align: center;
+            padding-top: 100px; /* Space for the fixed header */
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 30px; /* Increased gap */
+        }
+
+        .subtitle {
+            margin: 20px 0;
+            font-size: 18px;
+            font-weight: bold;
+            color: #553855;
+        }
+
+        /* Grid Layout */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 40px; /* Increased gap */
+            padding: 0 20px;
+            width: 100%;
+            max-width: 854px;
+            margin-left: 263px;
+            margin-top: 25px;
+            margin-bottom: 13px
+        }
+
+        /* Grid Item Styles */
+        .grid-item {
+            background-color: rgba(224, 224, 224, 0.8);
+            border-radius: 15px;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .grid-item:hover {
+            transform: scale(1.05) translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        }
+
+        .grid-item img {
+            width: 100%;
+            height: auto;
+            max-height: 200px;
+            object-fit: cover;
+            border-radius: 8px;
+            transition: transform 0.3s ease;
+        }
+
+        .grid-item:hover img {
+            transform: scale(1.05);
+        }
+
+        .grid-item a {
+            margin-top: 8px;
+            font-size: 1.1em;
+            color: #4a4a4a;
+            text-decoration: none;
+            font-weight: bold;
+            transition: color 0.3s ease;
+        }
+
+        .grid-item a:hover {
+            color: #553855;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .grid {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .header h1 {
+                font-size: 20px;
+            }
+
+            .header .home-icon {
+                font-size: 16px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div>
+            <h1>Future Vault</h1>
+            <p>Preserve Today, Unlock Tomorrow</p>
+        </div>
+        <div class="profile">
+            <img id="profile-icon" src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Profile Icon">
+            <span>USERNAME</span>
+            <div id="profile-menu" class="profile-menu">
+                <a href="./profifepage.html">My Profile</a>
+                <a href="./mymemories.html">My Memories</a>
+                <a href="#">Settings</a>
+                <a href="#">Logout</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Section -->
+
+        <div class="grid">
+            <div class="grid-item">
+                <img alt="People celebrating a birthday with a cake and candles" src="https://storage.googleapis.com/a1aa/image/hYHy3iTwrsqjNpeQKpBe5LSNHoGnWz3GfvbN0VZxCPTLUc9nA.jpg" />
+                <a href="page3.php?cat=birthday">BIRTHDAY</a>
+            </div>
+            <div class="grid-item">
+                <img alt="Person in graduation gown and cap" src="https://storage.googleapis.com/a1aa/image/h72Lsemv1MznSy0qsHl87vFAeMxfzwxSey7t4ESBd4Qlo46PB.jpg" />
+                <a href="page3.php?cat=graduation">GRADUATION</a>
+            </div>
+            <div class="grid-item">
+                <img alt="Wedding ceremony with bride and groom" src="https://storage.googleapis.com/a1aa/image/VghBKhvRKiLvMxKV5pJeYClGUwPn5SFhz5596YDoVcwDFXfTA.jpg" />
+                <a href="page3.php?cat=birthday">WEDDING</a>
+            </div>
+            <div class="grid-item">
+                <img alt="Family reunion with happy people" src="https://storage.googleapis.com/a1aa/image/FzZpfSeTelbZnofWHaPqQYvDCYBknQlxw7epEUhkKVcXQx1fE.jpg" />
+                <a href="page3.php?cat=reunion">REUNION</a>
+            </div>
+            <div class="grid-item">
+                <img alt="New home with a family outside" src="https://storage.googleapis.com/a1aa/image/ewFjVFseW1kwMUT0SfsZS75rEKhxcN4IoBFGNX6mV9kdUc9nA.jpg" />
+                <a href="page3.php?cat=new_home">NEW HOME</a>
+            </div>
+            <div class="grid-item">
+                <img alt="New beginnings with a couple holding hands" src="https://storage.googleapis.com/a1aa/image/LLEzVT7bbTpbD9N9l7u68VckbLlxqe6IbKxeukaQnVjKKuenA.jpg" />
+                <a href="page3.php?cat=new_beginnings">NEW BEGINNINGS</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Terms of Service - Future Vault</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Poppins', sans-serif;
+            background: url('./download\ \(1\).jpg') no-repeat center center/cover;
+            color: rgb(69, 76, 85);
+            line-height: 1.6;
+        }
+
+        /* Header styling */
+        header {
+            background: rgba(178, 204, 238, 0.468);
+            color: #4a4a4a;
+            padding: 40px 10%;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .header-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .header-container h1 {
+            margin: 0;
+            font-size: 3em;
+            font-weight: bold;
+            letter-spacing: 2px;
+        }
+
+        .header-container p {
+            margin: 10px 0;
+            font-size: 1.4em;
+            font-weight: 300;
+        }
+
+        .profile {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            position: relative;
+        }
+
+        .profile img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        .profile span {
+            color: #4a4a4a;
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+
+        .profile-menu {
+            position: absolute;
+            top: 70px;
+            right: 0;
+            background: rgba(255, 255, 255, 0.623);
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            display: none;
+            flex-direction: column;
+            width: 150px;
+            text-align: left;
+        }
+
+        .profile-menu a {
+            text-decoration: none;
+            color: #2b2728;
+            padding: 10px 15px;
+            font-size: 1em;
+            border-bottom: 1px solid #ddd;
+            transition: background 0.3s ease;
+        }
+
+        .profile-menu a:hover {
+            background: #f4dfba;
+        }
+
+        .show-menu {
+            display: flex;
+        } 
+    
+        section {
+            background-color: #ffffffb4;
+            margin: 20px auto;
+            padding: 20px;
+            max-width: 800px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+        section h2 {
+            color: #3140a0;
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+        }
+        ul {
+            padding-left: 20px;
+        }
+        ul li {
+            margin-bottom: 10px;
+        }
+        p {
+            font-size: 1rem;
+            margin-bottom: 15px;
+        }
+        footer {
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            text-align: center;
+            padding: 20px;
+            font-size: 0.9em;
+        }
+
+        footer a {
+            color: #ffffff;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        .show-menu {
+            display: flex;
+        }
+    </style>
+</head>
+<header>
+    <div class="header-container">
+        <div>
+            <h1>Future Vault</h1>
+            <p>Preserve Today, Unlock Tomorrow</p>
+        </div>
+        <div class="profile">
+            <img id="profile-icon" src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Profile Icon" onclick="toggleMenu()">
+            <span>USERNAME</span>
+            <div id="profile-menu" class="profile-menu">
+                <a href="#">My Profile</a>
+                <a href="#">Settings</a>
+                <a href="#">Logout</a>
+            </div>
+        </div>
+    </div>
+</header>
+<body>
+    <section>
+        <h2>1. Introduction</h2>
+        <p>Welcome to Future Vault! These Terms of Service govern your use of our platform, services, and products. By using our services, you agree to comply with these terms and conditions.</p>
+    </section>
+
+    <section>
+        <h2>2. Eligibility</h2>
+        <p>You must be at least 13 years old to use our services. By using our platform, you confirm that you meet the eligibility requirements.</p>
+    </section>
+
+    <section>
+        <h2>3. Account Creation</h2>
+        <p>To access certain features, you must create an account. You are responsible for keeping your account information secure and confidential.</p>
+    </section>
+
+    <section>
+        <h2>4. User Responsibilities</h2>
+        <p>By using our platform, you agree to:</p>
+        <ul>
+            <li>Provide accurate and up-to-date information.</li>
+            <li>Not upload any harmful or offensive content.</li>
+            <li>Comply with all applicable laws and regulations.</li>
+        </ul>
+    </section>
+
+    <section>
+        <h2>5. Use of the Platform</h2>
+        <p>You agree to use our platform only for lawful purposes. We reserve the right to suspend or terminate your account if we believe you have violated these terms.</p>
+    </section>
+
+    <section>
+        <h2>6. Content Ownership</h2>
+        <p>You retain ownership of the content you upload to our platform. However, by uploading content, you grant us a non-exclusive, worldwide license to use, store, and display it within our services.</p>
+    </section>
+
+    <section>
+        <h2>7. Privacy</h2>
+        <p>Your privacy is important to us. Please review our <a href="privacy-policy.html">Privacy Policy</a> to understand how we collect and protect your information.</p>
+    </section>
+
+    <section>
+        <h2>8. Termination</h2>
+        <p>We may suspend or terminate your account at any time, without notice, if we believe you have violated these Terms of Service.</p>
+    </section>
+
+    <section>
+        <h2>9. Limitation of Liability</h2>
+        <p>Our liability is limited to the maximum extent permitted by law. We are not responsible for any indirect, incidental, or consequential damages arising from your use of our services.</p>
+    </section>
+
+    <section>
+        <h2>10. Modifications to Terms</h2>
+        <p>We may update these Terms of Service from time to time. Any changes will be posted on this page with an updated effective date.</p>
+    </section>
+
+    <section>
+        <h2>11. Contact Us</h2>
+        <p>If you have any questions about these Terms of Service, please contact us at:</p>
+        <ul>
+            <li><strong>Email:</strong> <a href="mailto:support@futurevault.com">support@futurevault.com</a></li>
+            <li><strong>Address:</strong> Future Vault, [Insert Address]</li>
+        </ul>
+    </section>
+    <footer>
+        <p>&copy; 2025 Future Vault | <a href="./privacy.html">Privacy Policy</a> | <a href="./tos.html">Terms of Service</a></p>
+    </footer>
+
+    <script>
+        const profileIcon = document.getElementById('profile-icon');
+        const profileMenu = document.getElementById('profile-menu');
+
+        profileIcon.addEventListener('click', () => {
+            profileMenu.classList.toggle('show-menu');
+        });
+
+        document.addEventListener('click', (e) => {
+            if (!profileIcon.contains(e.target) && !profileMenu.contains(e.target)) {
+                profileMenu.classList.remove('show-menu');
+            }
+        });
+    </script>
+</body>
+</html>

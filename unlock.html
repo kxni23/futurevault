@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Memory Unlock</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      background-color: #f7f7f7;
+    }
+
+    .container {
+      text-align: center;
+    }
+
+    .mystery-box {
+      width: 200px;
+      height: 200px;
+      background-color: #ffcc00;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      transition: transform 0.3s ease;
+    }
+
+    .mystery-box:hover {
+      transform: scale(1.1);
+    }
+
+    .memory-content {
+      margin-top: 20px;
+    }
+
+    #memoryImage {
+      width: 100%;
+      max-width: 300px;
+      border-radius: 10px;
+    }
+
+    #memoryText {
+      font-size: 18px;
+      margin-top: 20px;
+      color: #333;
+    }
+
+    .countdown {
+      margin-top: 20px;
+      font-size: 24px;
+      font-weight: bold;
+      color: #333;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Unlock Your Memory</h1>
+
+    <!-- Countdown Timer -->
+    <div class="countdown">
+      <p>Memory unlocks in:</p>
+      <div id="timer"></div>
+    </div>
+
+    <!-- Mystery Box -->
+    <div class="mystery-box" id="mysteryBox" onclick="revealMemory()">
+      <p>Click to Open</p>
+    </div>
+
+    <!-- Memory Content -->
+    <div class="memory-content" id="memoryContent" style="display: none;">
+      <img src="your-memory-image.jpg" alt="Your Memory" id="memoryImage" style="display: none;">
+      <p id="memoryText" style="display: none;">Your unlocked memory text goes here!</p>
+    </div>
+  </div>
+
+  <script>
+    // Countdown Timer
+    let countdownDate = new Date().getTime() + 6000; // Set the timer for 1 minute from now
+
+    let countdownInterval = setInterval(function() {
+      let now = new Date().getTime();
+      let distance = countdownDate - now;
+
+      let minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+      let seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+      document.getElementById("timer").innerHTML = minutes + "m " + seconds + "s ";
+
+      if (distance < 0) {
+        clearInterval(countdownInterval);
+        document.getElementById("timer").innerHTML = "Time's up! Click the box to unlock your memory!";
+      }
+    }, 1000);
+
+    // Mystery Box Reveal Function
+    function revealMemory() {
+      // Hide the mystery box
+      document.getElementById("mysteryBox").style.display = "none";
+
+      // Show the unlocked memory content
+      document.getElementById("memoryContent").style.display = "block";
+      document.getElementById("memoryImage").style.display = "block";
+      document.getElementById("memoryText").style.display = "block";
+    }
+  </script>
+</body>
+</html>
