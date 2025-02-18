@@ -4,10 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Seller Login - Future Vault</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Roboto&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-    
+    <link @import url('https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap');/><meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
          * {
       margin: 0;
@@ -17,7 +15,7 @@
     }
         body {
             margin: 0;
-            font-family: 'Poppins', sans-serif;
+       
             background: url('./download\ \(1\).jpg') no-repeat center center/cover;
             color: #4a4a4a;
             line-height: 1.6;

@@ -1,52 +1,61 @@
-<?php
-include('api/config.php');
-header('Content-Type: application/json');
+<?php 
+header('Content-Type: application/json'); // Ensure JSON response
 
-$response = ["status" => "error", "message" => "Something went wrong"];
+include 'api/config.php'; // Include database connection
+
+$response = [];
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Sanitize & Validate Inputs
-    $businessName = trim($_POST['businessName']);
+    $business_name = trim($_POST['business_name']);
     $username = trim($_POST['username']);
-    $email = filter_var($_POST['email'], FILTER_SANITIZE_EMAIL);
-    $password = $_POST['password']; // Password is hashed below
+    $email = trim($_POST['email']);
+    $password = password_hash(trim($_POST['password']), PASSWORD_DEFAULT); // Secure password
     $phone = trim($_POST['phone']);
-    $businessAddress = trim($_POST['businessAddress']);
-    $websiteLink = filter_var($_POST['websiteLink'], FILTER_SANITIZE_URL);
+    $business_address = trim($_POST['business_address']);
+    $website_link = trim($_POST['website_link']);
+    $created_at = date("Y-m-d H:i:s"); // Current timestamp
 
-    if (empty($businessName) || empty($username) || empty($email) || empty($password) || empty($phone)) {
-        $response["message"] = "Please fill in all required fields.";
-    } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-        $response["message"] = "Invalid email format.";
-    } elseif (!preg_match("/^[0-9]{10}$/", $phone)) {
-        $response["message"] = "Invalid phone number format.";
-    } else {
-        // 🔒 Secure Password Hashing
-        // $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
-
-        // SQL Query with Prepared Statement
-        $sql = "INSERT INTO sellers (business_name, username, email, password, phone, business_address, website_link) 
-                VALUES (?, ?, ?, ?, ?, ?, ?)";
+    // Generate a unique seller ID in the format "SEL123456"
+    do {
+        $random_number = rand(100000, 999999);
+        $seller_id = "SEL" . $random_number;
         
-        $stmt = $conn->prepare($sql);
-        if ($stmt) {
-            $stmt->bind_param('sssssss', $businessName, $username, $email, $password, $phone, $businessAddress, $websiteLink);
-            
-            if ($stmt->execute()) {
-                $response["status"] = "success";
-                $response["message"] = "Details added successfully!";
-                $response["sellerId"] = $stmt->insert_id; // Get the inserted seller ID
-            } else {
-                $response["message"] = "Database error: " . $stmt->error;
-            }
-            
-            $stmt->close();
+        // Check if the generated seller_id already exists
+        $checkStmt = $conn->prepare("SELECT seller_id FROM sellers WHERE seller_id = ?");
+        $checkStmt->bind_param("s", $seller_id);
+        $checkStmt->execute();
+        $checkStmt->store_result();
+    } while ($checkStmt->num_rows > 0);
+    $checkStmt->close();
+
+    // Prepare and execute the insert query
+    $stmt = $conn->prepare("INSERT INTO sellers (seller_id, business_name, username, email, password, phone, business_address, website_link, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
+
+    if ($stmt) {
+        $stmt->bind_param("sssssssss", $seller_id, $business_name, $username, $email, $password, $phone, $business_address, $website_link, $created_at);
+        
+        if ($stmt->execute()) {
+            $response['success'] = true;
+            $response['message'] = "Seller registered successfully!";
+            $response['seller_id'] = $seller_id; // Return generated seller ID
         } else {
-            $response["message"] = "SQL preparation error: " . $conn->error;
+            $response['success'] = false;
+            $response['error'] = "Error: " . $stmt->error;
         }
+        
+        $stmt->close();
+    } else {
+        $response['success'] = false;
+        $response['error'] = "Error in preparing the statement: " . $conn->error;
     }
+
+    $conn->close();
+} else {
+    $response['success'] = false;
+    $response['error'] = "Invalid request method.";
 }
 
-$conn->close();
+// Send JSON response
 echo json_encode($response);
+exit;
 ?>

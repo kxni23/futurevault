@@ -76,66 +76,128 @@ $category = $_GET['cat'];
         }
 
         /* Modal (Detailed Memory View) */
+        @keyframes popIn {
+    0% {
+        transform: scale(0.8); /* Start small */
+        opacity: 0;
+    }
+    50% {
+        transform: scale(1.1); /* Make it slightly larger than the final size */
+        opacity: 1;
+    }
+    100% {
+        transform: scale(1); /* End at normal size */
+        opacity: 1;
+    }
+
+}
+
         .memory-modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(26, 110, 110, 0.5);
-            justify-content: center;
-            align-items: center;
-            overflow-y: auto;
-            padding: 20px;
-            z-index:2222;
-        }
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(8px);
+    justify-content: center;
+    align-items: center;
+    overflow-y: auto;
+    padding: 20px;
+    z-index: 9999;
+    animation: fadeIn 0.3s ease-in-out;
+}
 
-        .memory-modal-content {
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 10px;
-            max-width: 800px;
-            width: 80%;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-            max-height: 80vh;
-            overflow-y: auto;
-            position: relative;
-        }
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
 
-        .memory-modal-content h2 {
-            margin: 0;
-            font-size: 2em;
-            color: #333;
-        }
+.memory-modal-content {
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 15px;
+    padding: 25px;
+    max-width: 700px;
+    width: 90%;
+    box-shadow: 0px 6px 20px rgba(0, 0, 0, 0.2);
+    max-height: 80vh;
+    overflow-y: auto;
+    position: relative;
+    text-align: center;
+    animation: fadeIn 0.3s ease-in-out;
+}
 
-        .memory-modal-content .image-container {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            margin-bottom: 20px;
-            margin-top:20px;
-            background-color: rgba(61, 132, 179, 0.5);
-        }
 
-        .memory-modal-content img {
-            width: 100%;
-            height: auto;
-            object-fit: cover;
-        }
 
-        .memory-modal-content p {
-            font-size: 1.2em;
-            color: #555;
-            margin: 20px 0;
-        }
 
-        .memory-modal-content .unlock-date {
-            font-size: 1.2em;
-            color: #aaa;
-            padding: 10px;
-            margin-top: 20px;
-        }
+.memory-modal-content .image-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 5%; /* Adjust based on screen size */
+    margin-top: 5%; /* Adjust based on screen size */
+    /* Remove background color */
+    background-color: transparent; /* Set to transparent if you want no background */
+    max-height: 50vh; /* Responsive height */
+    overflow-y: auto; /* Enable vertical scrolling */
+    padding: 5%; /* Adjust padding to be relative */
+    border-radius: 8px;
+}
+
+
+
+
+.memory-modal-content img {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: transform 0.3s ease-in-out;
+}
+
+.memory-modal-content img:hover {
+    transform: scale(1.05);
+}
+
+.memory-modal-content p {
+    font-size: 1.1em;
+    color: #444;
+    margin: 20px 0;
+}
+
+.memory-modal-content .unlock-date {
+    font-size: 1em;
+    color: #777;
+    background: #eef2f3;
+    padding: 8px 12px;
+    border-radius: 5px;
+    display: inline-block;
+    margin-top: 10px;
+}
+
+.memory-modal-content .close-btn {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background: rgba(255, 255, 255, 0.7);
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    border-radius: 50%;
+    padding: 6px 10px;
+    transition: background 0.3s ease-in-out;
+}
+
+.memory-modal-content .close-btn:hover {
+    background: rgba(255, 255, 255, 1);
+}
 
        /* Modal Control Buttons Container */
         .modal-controls {

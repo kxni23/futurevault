@@ -142,9 +142,4 @@ if ($result->num_rows == 1) {
             <a href="subs.php">Subscribe</a>
         </nav>
 
-        <div class="profile">
-            <img id="profile-icon" src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Profile Icon" onclick="toggleMenu()">
-            <span><?php echo $username; ?></span>
-            
-        </div>
-    </header>
+           </header>

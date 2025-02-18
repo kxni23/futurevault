@@ -1,5 +1,5 @@
 <?php
-session_start(); // Start the session
+// session_start(); // Start the session
 include('config.php'); // Database connection
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {

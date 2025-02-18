@@ -12,7 +12,7 @@ $sellerid = intval($_SESSION['id']);
 
 if ($sellerid > 0) {
     // Use prepared statement to prevent SQL injection
-    $sql = "SELECT username, email,  password, business_name, website_link FROM sellers WHERE id = ?";
+    $sql = "SELECT username, email,  password, business_name, website_link,phone FROM sellers WHERE id = ?";
     
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("i", $sellerid);
@@ -30,6 +30,8 @@ if ($sellerid > 0) {
         $BusinessName = htmlspecialchars($userInfo['business_name']);
         // $BusinessType = htmlspecialchars($userInfo['business_type']);
         $Website = htmlspecialchars($userInfo['website_link']);
+        $phone = htmlspecialchars($userInfo['phone']);
+
         // $joined = htmlspecialchars($userInfo['joined_date']);
     } else {
         echo "<script>alert('User not found'); window.location.href='loginn.html';</script>";
@@ -108,7 +110,7 @@ $conn->close();
         <h2>Shop Details</h2>
         <p><strong>Business Name:</strong> <?php echo htmlspecialchars($BusinessName); ?></p>
         <p><strong>Website:</strong> <a href="<?php echo htmlspecialchars($Website); ?>" target="_blank"><?php echo htmlspecialchars($Website); ?></a></p>
-        <p><strong>About:</strong> <?php echo nl2br(htmlspecialchars($bio)); ?></p>
+        <p><strong>Phone:</strong> <?php echo nl2br(htmlspecialchars($phone)); ?></p>
     </div>
 
     <!-- Edit Form -->

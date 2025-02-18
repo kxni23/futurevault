@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,21 +10,25 @@
         body {
             background: url('./download\ \(1\).jpg') no-repeat center center/cover;
             font-family: Arial, sans-serif;
-            padding-top: -27px; /* To offset the fixed header */
+            padding-top: -27px;
+            /* To offset the fixed header */
         }
 
         .header {
             width: 100%;
             background-color: #ffffff;
             color: rgb(0, 0, 0);
-            padding: 10px 30px; /* Adjust padding for better alignment */
-            text-align: left; /* Keep title left-aligned */
+            padding: 10px 30px;
+            /* Adjust padding for better alignment */
+            text-align: left;
+            /* Keep title left-aligned */
             position: fixed;
             top: 0;
             left: 0;
             z-index: 10;
             display: flex;
-            justify-content: space-between; /* Ensures the title and home icon are spaced properly */
+            justify-content: space-between;
+            /* Ensures the title and home icon are spaced properly */
             align-items: center;
         }
 
@@ -40,7 +45,8 @@
 
         .content {
             padding: 30px;
-            margin-top: 80px; /* Adjust for header height */
+            margin-top: 80px;
+            /* Adjust for header height */
         }
 
         .dashboard-container {
@@ -55,11 +61,12 @@
             font-size: 1.75rem;
             margin-bottom: 15px;
             font-weight: 600;
-            
+
 
         }
 
-        .btn-primary, .btn-secondary {
+        .btn-primary,
+        .btn-secondary {
             font-size: 1rem;
             background-color: rgb(102, 154, 210);
             color: azure;
@@ -74,7 +81,57 @@
             margin-bottom: 20px;
         }
     </style>
+    <style>
+        /* 3D Loader Animation */
+        .loader {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 9999;
+            display: none;
+        }
+
+        .loader-3d {
+            width: 50px;
+            height: 50px;
+            border: 6px solid #f3f3f3;
+            border-top: 6px solid #3498db;
+            border-radius: 50%;
+            animation: spin 2s linear infinite;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Pop-up Styles */
+        .popup {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.8);
+            padding: 20px;
+            border-radius: 8px;
+            color: white;
+            z-index: 9999;
+            text-align: center;
+        }
+
+        .popup-content {
+            padding: 10px;
+        }
+    </style>
+
 </head>
+
 <body>
     <div class="header">
         <h1>ADMIN</h1>
@@ -127,12 +184,72 @@
                 <section id="EmailNotification">
                     <h2 class="section-title">Email Notification</h2>
                     <p>Manage reminders.</p>
-                    <a href="email.php" class="btn btn-secondary">send email</a>
+                    <button class="btn btn-secondary" id="sendEmailBtn">Send Email</button>
                 </section>
             </div>
+
+            <!-- Loading Spinner -->
+            <div id="loader" class="loader" style="display: none;">
+                <div class="loader-3d"></div>
+            </div>
+
+            <!-- Pop-up Message -->
+            <div class="popup" id="popup" style="display: none;">
+                <div class="popup-content">
+                    <p id="popup-message"></p>
+                    <button onclick="closePopup()">Close</button>
+                </div>
+            </div>
+
         </div>
     </div>
 
+    <script>
+        document.getElementById('sendEmailBtn').addEventListener('click', function() {
+            // Show loader
+            document.getElementById('loader').style.display = 'block';
+
+            // Send AJAX request
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', 'api/email.php', true);
+            xhr.setRequestHeader('Content-Type', 'application/json');
+
+            xhr.onload = function() {
+                // Hide loader once the request is complete
+                document.getElementById('loader').style.display = 'none';
+
+                if (xhr.status === 200) {
+                    var response = JSON.parse(xhr.responseText);
+                    showPopup(response.                                                                                                                                                                                                                         );
+                } else {
+                    showPopup('An error occurred while sending the email.');
+                }
+            };
+
+            xhr.onerror = function() {
+                document.getElementById('loader').style.display = 'none';
+                showPopup('Request failed, please try again later.');
+            };
+
+            // Data to send (can be extended if needed)
+            var data = JSON.stringify({
+                action: 'sendEmail'
+            });
+
+            xhr.send(data);
+        });
+
+        function showPopup(message) {
+            document.getElementById('popup-message').textContent = message;
+            document.getElementById('popup').style.display = 'block';
+        }
+
+        function closePopup() {
+            document.getElementById('popup').style.display = 'none';
+        }
+    </script>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>

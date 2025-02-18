@@ -12,7 +12,7 @@ include('api/config.php');
     <style>
         body {
             margin: 0;
-            font-family: 'Poppins', sans-serif;
+            font-family: 'ribeye';
             background: url('./download\ \(1\).jpg') no-repeat center center/cover;
             color: rgba(178, 204, 238, 0.468);
             line-height: 1.6;

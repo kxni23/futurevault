@@ -1,24 +1,27 @@
-<?php 
+<?php
 include('api/config.php');
 ?>
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="utf-8" />
     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
     <title>Future Vault</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
+    <link @import url('https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap');/>
+
     <style>
         body {
             margin: 0;
-            font-family: 'Poppins', sans-serif;
+            font-family: 'ribeye';
             background: url('./download\ \(1\).jpg') no-repeat center center/cover;
             color: rgba(178, 204, 238, 0.468);
             line-height: 1.6;
         }
 
-        
+
         /* Title */
         .title {
             text-align: center;
@@ -45,7 +48,7 @@ include('api/config.php');
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             transition: transform 0.3s, box-shadow 0.3s;
             width: 90%;
-            text-decoration:none;
+            text-decoration: none;
         }
 
         .grid-item img {
@@ -57,7 +60,7 @@ include('api/config.php');
         .grid-item p {
             margin: 10px 0;
             font-size: 18px;
-            color:rgb(255, 247, 249);
+            color: rgb(255, 247, 249);
             font-weight: bold;
         }
 
@@ -76,10 +79,10 @@ include('api/config.php');
         footer {
             background: rgba(178, 204, 238, 0.8);
             color: #2b2728;
-            padding: 20px 10%;
+            /* padding: 20px 10%; */
             text-align: center;
-            
-            
+
+
         }
 
         footer h2 {
@@ -113,12 +116,16 @@ include('api/config.php');
         footer .social-icons i:hover {
             color: #2b2728;
         }
+        nav a{
+            font-family: 'Great Vibes', cursive;
+        }
     </style>
 </head>
+
 <body>
     <!-- Header -->
-    
-<?php include('header.php') ?>
+
+    <?php include('header.php') ?>
     <!-- Content -->
     <div class="grid">
         <!-- Family -->
@@ -133,7 +140,7 @@ include('api/config.php');
             <p>PARTNER</p>
         </a>
 
-        
+
         <!-- Friends -->
         <a href="mymemoriesfam.php?cat=friends" class="grid-item">
             <img src="ffffff.avif" alt="Group of friends" />
@@ -166,7 +173,7 @@ include('api/config.php');
     </div>
 
     <!-- Footer -->
-   <?php include('footer.php')?>
+    <?php include('footer.php') ?>
 
     <script>
         function toggleMenu() {
@@ -175,4 +182,5 @@ include('api/config.php');
         }
     </script>
 </body>
+
 </html>

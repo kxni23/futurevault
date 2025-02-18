@@ -11,7 +11,7 @@ include('api/config.php');
     <style>
         body {
             margin: 0;
-            font-family: 'Poppins', sans-serif;
+            font-family: 'honk';
             background: url('./download\ \(1\).jpg') no-repeat center center/cover;
             color: #4a4a4a;
             line-height: 1.6;
@@ -306,8 +306,8 @@ include('api/config.php');
         <p>Securely store your memories in a digital vault, ensuring they remain safe and accessible only to you.</p>
     </div>
     <div class="description-box">
-        <h3>Explore Memories</h3>
-        <p>Browse and unlock your cherished moments, bringing them to life whenever you wish.</p>
+        <h3>Explore gifts</h3>
+        <p>Discover the perfect gift for every occasion! Browse through a curated selection of unique and meaningful gifts from verified sellers.</p>
     </div>
 </section>
 
