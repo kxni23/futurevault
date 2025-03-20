@@ -1,3 +1,6 @@
+<?php 
+include('api/config.php');
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>

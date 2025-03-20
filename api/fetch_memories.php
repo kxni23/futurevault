@@ -1,26 +1,38 @@
 <?php
 include('config.php');
 
-$userid = $_SESSION["id"];
-$category = $_GET["cat"];
+header('Content-Type: application/json'); // Ensure JSON response
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 
-$sql = "SELECT title, date AS unlockDate, description, file, PersonID FROM memory WHERE userid = '$userid' AND category = '$category'";
+
+
+if (!isset($_GET['cat']) || empty($_GET['cat'])) {
+    echo json_encode(["error" => "Missing category parameter"]);
+    exit;
+}
+
+$category = mysqli_real_escape_string($conn, $_GET['cat']);
+
+
+
+$sql = "SELECT * FROM memory WHERE category = '$category'";
 $result = mysqli_query($conn, $sql);
 
-if ($result) {
-    $memories = [];
+if (!$result) {
+    echo json_encode(["error" => "Query failed: " . mysqli_error($conn)]);
+    exit;
+}
 
-    while ($row = mysqli_fetch_assoc($result)) {
-        $memories[] = $row;
-    }
+$memories = [];
+while ($row = mysqli_fetch_assoc($result)) {
+    $memories[] = $row;
+}
 
-    if (empty($memories)) {
-        echo json_encode(['message' => 'No memories found, add a new memory.']);
-    } else {
-        echo json_encode($memories);
-    }
+if (empty($memories)) {
+    echo json_encode(["error" => "No memories found for this category"]);
 } else {
-    echo json_encode(['error' => mysqli_error($conn)]);
+    echo json_encode(["success" => true, "data" => $memories]);
 }
 
 mysqli_close($conn);

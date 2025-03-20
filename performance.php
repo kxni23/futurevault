@@ -5,19 +5,25 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Seller Performance</title>
     <style>
-        * {
+   * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
       flex-direction:column;
     }
-        body {
-            font-family: 'Poppins', sans-serif;
-            margin: 0;
-            padding: 20px;
-            background: url('./download\ \(1\).jpg') no-repeat center center/cover;
-        }
-        header {
+
+    body {
+      font-family: 'Arial', sans-serif;
+      background: url('./download\ \(1\).jpg') no-repeat center center/cover;
+      color: #333;
+      line-height: 1.6;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+    header {
             background: #fff;
             color: #333;
             padding: 15px 5%;
@@ -181,15 +187,9 @@
             <a href="sellerdashboard.php">Dashboard</a>
             <a href="selleracc.php">My Account</a>
             
-            <a href="settings.php">Settings</a>
             
         </nav>
 
-        <div class="profile">
-            <img id="profile-icon" src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Profile Icon" onclick="toggleMenu()">
-            
-            
-        </div>
     </header>
 <body>
     <div class="container">

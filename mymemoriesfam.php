@@ -209,22 +209,6 @@ $category = $_GET['cat'];
             z-index: 2;
         }
 
-        /* Maximize Button */
-        .maximize-modal {
-            font-size: 16px;
-            background: #4a90e2;
-            color: #fff;
-            border: none;
-            border-radius: 5px;
-            padding: 5px 10px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-
-        .maximize-modal:hover {
-            background: #357ab7;
-        }
-
         /* Close Button */
         .close-modal {
             font-size: 16px;
@@ -240,16 +224,35 @@ $category = $_GET['cat'];
         .close-modal:hover {
             background: #d43c3c;
         }
+        /* Fullscreen Media Modal */
+.fullscreen-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.9);
+    justify-content: center;
+    align-items: center;
+    z-index: 10000;
+}
 
-        /* Adjustments for Maximized Modal */
-        .memory-modal.maximized .memory-modal-content {
-            width: 100%;
-            height: 100%;
-            max-width: none;
-            max-height: none;
-            border-radius: 0;
-            padding: 20px;
-        }
+.fullscreen-content {
+    max-width: 90%;
+    max-height: 90%;
+}
+
+.close-fullscreen {
+    position: absolute;
+    top: 20px;
+    right: 30px;
+    font-size: 40px;
+    color: white;
+    cursor: pointer;
+}
+
+
 
     </style>
 </head>
@@ -258,6 +261,13 @@ $category = $_GET['cat'];
 <!-- Header Section -->
 <?php include('header.php')?>
 <!-- Memory List -->
+ <!-- Fullscreen Media Modal -->
+<div id="fullscreen-media-modal" class="fullscreen-modal">
+    <span class="close-fullscreen" onclick="closeFullscreenMedia()">&times;</span>
+    <img id="fullscreen-image" class="fullscreen-content">
+    <video id="fullscreen-video" class="fullscreen-content" controls></video>
+</div>
+
 <div class="memory-list" id="memory-list">
     <!-- Memory cards will be dynamically added here -->
 </div>
@@ -285,162 +295,247 @@ $category = $_GET['cat'];
     </div>
 </div>
 
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 <script>
+    document.addEventListener("DOMContentLoaded", function () {
     const memoryList = document.getElementById('memory-list');
 
-    async function fetchMemories() {
-    try {
-        const url = `api/fetch_memories.php?cat=<?php echo $category; ?>`;
-        const response = await fetch(url);
+    function fetchMemories() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const category = urlParams.get('cat') || 'default'; // Change 'default' to a valid category
 
-        if (!response.ok) {
-            throw new Error('Network response was not ok ' + response.statusText);
+        $.ajax({
+            url: 'api/fetch_memories.php',
+            type: 'GET',
+            data: { cat: category },
+            dataType: 'json',
+            success: function (result) {
+                if (result.error) {
+                    console.error(result.error);
+                    memoryList.innerHTML = `<h1 style="background: rgba(255, 255, 255, 0.623); width: 800px; text-align: center; margin: 0 auto; padding: 20px;">${result.error}</h1>`;
+                    return;
+                }
+
+                memoryList.innerHTML = '';
+
+                result.data.forEach(memory => addMemory(memory));
+            },
+            error: function (xhr, status, error) {
+                console.error("AJAX error:", error);
+            }
+        });
+    }
+
+    function addMemory(memory) {
+        const card = document.createElement('div');
+        card.classList.add('memory-card');
+        card.dataset.unlockDate = memory.date; // Use correct key
+        card.dataset.content = memory.description;
+        card.dataset.images = JSON.stringify(memory.file.split(', ')); // Convert comma-separated string to an array
+
+        const title = document.createElement('h3');
+        title.textContent = memory.title;
+
+        const unlockDate = document.createElement('div');
+        unlockDate.classList.add('unlock-date');
+
+        const currentDate = new Date().toISOString().split('T')[0];
+        if (memory.date > currentDate) {
+            const daysRemaining = Math.ceil((new Date(memory.date) - new Date(currentDate)) / (1000 * 60 * 60 * 24));
+            unlockDate.textContent = `Locked - ${daysRemaining} days remaining`;
+        } else {
+            unlockDate.textContent = `Unlock on: ${memory.date}`;
         }
 
-        const result = await response.json();
+        const viewButton = document.createElement('button');
+        viewButton.classList.add('view-btn');
+        viewButton.textContent = 'View';
+        viewButton.onclick = () => openMemoryModal(card);
 
-        if (result.error) {
-            console.error(result.error);
+        card.append(title, unlockDate, viewButton);
+        memoryList.appendChild(card);
+    }
+
+    function openMemoryModal(card) {
+        const unlockDate = card.dataset.unlockDate;
+        const currentDate = new Date().toISOString().split('T')[0];
+        
+        if (unlockDate > currentDate) {
+            alert("This memory is still locked.");
             return;
         }
 
-        if (result.message) {
-            memoryList.innerHTML = `<h1 style=" background: rgba(255, 255, 255, 0.623) ; width: 800px; text-align: center; margin: 0 auto; padding: 20px; display: flex; justify-content: center; align-items: center;">
-                                    ${result.message}
-                                    </h1>
-                                    `;
+        const title = card.querySelector('h3').textContent;
+        const content = card.dataset.content;
+        let files = JSON.parse(card.dataset.images);
+
+        document.getElementById('modal-title').textContent = title;
+        document.getElementById('modal-description').textContent = content;
+        document.getElementById('modal-unlock-date').textContent = `Unlock Date: ${unlockDate}`;
+
+        const mediaContainer = document.getElementById('modal-images');
+        mediaContainer.innerHTML = '';
+        const basePath = 'api/uploads/';
+
+        files.forEach(src => {
+            if (src) {
+                const fileExtension = src.split('.').pop().toLowerCase();
+                let mediaElement;
+
+                if (["mp4", "webm", "ogg"].includes(fileExtension)) {
+                    mediaElement = document.createElement('video');
+                    mediaElement.controls = true;
+                    mediaElement.src = basePath + src;
+                } else if (["mp3", "wav", "ogg"].includes(fileExtension)) {
+                    mediaElement = document.createElement('audio');
+                    mediaElement.controls = true;
+                    mediaElement.src = basePath + src;
+                } else if (["jpg", "jpeg", "png", "gif"].includes(fileExtension)) {
+                    mediaElement = document.createElement('img');
+                    mediaElement.src = basePath + src;
+                }
+                
+                if (mediaElement) {
+                    mediaContainer.appendChild(mediaElement);
+                }
+            }
+        });
+
+        document.getElementById('memory-modal').style.display = 'flex';
+    }
+
+    function closeMemoryModal() {
+        document.getElementById('memory-modal').style.display = 'none';
+    }
+
+    function toggleMaximize() {
+        const modal = document.getElementById('memory-modal');
+        modal.classList.toggle('maximized');
+        modal.querySelector('.maximize-modal').textContent = modal.classList.contains('maximized') ? '❐' : '⛶';
+    }
+
+    fetchMemories();
+});
+
+</script>
+<script>
+    
+    document.addEventListener("DOMContentLoaded", function () {
+    const memoryList = document.getElementById('memory-list');
+
+    function fetchMemories() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const category = urlParams.get('cat') || 'default';
+
+        $.ajax({
+            url: 'api/fetch_memories.php',
+            type: 'GET',
+            data: { cat: category },
+            dataType: 'json',
+            success: function (result) {
+                if (result.error) {
+                    console.error(result.error);
+                    memoryList.innerHTML = `<h1 style="background: rgba(255, 255, 255, 0.623); width: 800px; text-align: center; margin: 0 auto; padding: 20px;">${result.error}</h1>`;
+                    return;
+                }
+
+                memoryList.innerHTML = '';
+                result.data.forEach(memory => addMemory(memory));
+            },
+            error: function (xhr, status, error) {
+                console.error("AJAX error:", error);
+            }
+        });
+    }
+
+    function addMemory(memory) {
+        const card = document.createElement('div');
+        card.classList.add('memory-card');
+        card.dataset.unlockDate = memory.date;
+        card.dataset.content = memory.description;
+        card.dataset.images = JSON.stringify(memory.file.split(', '));
+
+        const title = document.createElement('h3');
+        title.textContent = memory.title;
+
+        const unlockDate = document.createElement('div');
+        unlockDate.classList.add('unlock-date');
+
+        const currentDate = new Date().toISOString().split('T')[0];
+        if (memory.date > currentDate) {
+            const daysRemaining = Math.ceil((new Date(memory.date) - new Date(currentDate)) / (1000 * 60 * 60 * 24));
+            unlockDate.textContent = `Locked - ${daysRemaining} days remaining`;
+        } else {
+            unlockDate.textContent = `Unlock on: ${memory.date}`;
+        }
+
+        const viewButton = document.createElement('button');
+        viewButton.classList.add('view-btn');
+        viewButton.textContent = 'View';
+        viewButton.onclick = () => openMemoryModal(card);
+
+        card.append(title, unlockDate, viewButton);
+        memoryList.appendChild(card);
+    }
+
+    function openMemoryModal(card) {
+        const unlockDate = card.dataset.unlockDate;
+        const currentDate = new Date().toISOString().split('T')[0];
+        
+        if (unlockDate > currentDate) {
+            alert("This memory is still locked.");
             return;
         }
 
-        // Add memories to the page
-        result.forEach(memory => addMemory(memory));
-    } catch (error) {
-        console.error('There was a problem with the fetch operation:', error);
-    }
-}
+        const title = card.querySelector('h3').textContent;
+        const content = card.dataset.content;
+        let files = JSON.parse(card.dataset.images);
 
+        document.getElementById('modal-title').textContent = title;
+        document.getElementById('modal-description').textContent = content;
+        document.getElementById('modal-unlock-date').textContent = `Unlock Date: ${unlockDate}`;
 
+        const mediaContainer = document.getElementById('modal-images');
+        mediaContainer.innerHTML = '';
+        const basePath = 'api/uploads/';
 
-// Function to add memory to the vault (same as before)
-function addMemory(memory) {
-    const card = document.createElement('div');
-    card.classList.add('memory-card');
-    card.setAttribute('data-unlock-date', memory.unlockDate);
-    card.setAttribute('data-content', memory.description);
-    card.setAttribute('data-images', JSON.stringify(memory.file));
+        files.forEach(src => {
+            if (src) {
+                const fileExtension = src.split('.').pop().toLowerCase();
+                let mediaElement;
 
-    const title = document.createElement('h3');
-    title.textContent = memory.title;
-
-    const unlockDate = document.createElement('div');
-    unlockDate.classList.add('unlock-date');
-
-    const currentDate = new Date().toISOString().split('T')[0];
-    if (memory.unlockDate > currentDate) {
-        const daysRemaining = Math.ceil((new Date(memory.unlockDate) - new Date(currentDate)) / (1000 * 60 * 60 * 24));
-        unlockDate.textContent = `Locked - ${daysRemaining} days remaining`;
-    } else {
-        unlockDate.textContent = `Unlock on: ${memory.unlockDate}`;
-    }
-
-    const viewButton = document.createElement('button');
-    viewButton.classList.add('view-btn');
-    viewButton.textContent = 'View';
-    viewButton.onclick = function() {
-        openMemoryModal(card);
-    };
-
-    card.appendChild(title);
-    card.appendChild(unlockDate);
-    card.appendChild(viewButton);
-
-    memoryList.appendChild(card);
-}
-
-// Fetch and display memories on page load
-fetchMemories();
-
-
-function openMemoryModal(card) {
-    const unlockDate = card.getAttribute('data-unlock-date');
-    const currentDate = new Date().toISOString().split('T')[0];
-
-    if (unlockDate > currentDate) {
-        alert("This memory is still locked.");
-        return;
-    }
-
-    const title = card.querySelector('h3').textContent;
-    const content = card.getAttribute('data-content');
-    let files = card.getAttribute('data-images');
-
-    // Remove any surrounding quotes from the file paths and split by commas
-    files = files.split(',').map(file => file.trim().replace(/^"|"$/g, ''));
-
-    const unlockDateText = `Unlock Date: ${unlockDate}`;
-    document.getElementById('modal-title').textContent = title;
-    document.getElementById('modal-description').textContent = content;
-    document.getElementById('modal-unlock-date').textContent = unlockDateText;
-
-    const mediaContainer = document.getElementById('modal-images');
-    mediaContainer.innerHTML = ''; // Clear previous content
-
-    const basePath = 'api/uploads/'; // Define the base path for files
-
-    files.forEach(src => {
-        if (src) { // Check for non-empty string
-            const fileExtension = src.split('.').pop().toLowerCase();
-
-            let mediaElement;
-
-            if (['mp4', 'webm', 'ogg'].includes(fileExtension)) {
-                // Create a video element
-                mediaElement = document.createElement('video');
-                mediaElement.controls = true; // Add controls (play, pause, etc.)
-                mediaElement.src = basePath + src; // Prepend the file path
-            } else if (['mp3', 'wav', 'ogg'].includes(fileExtension)) {
-                // Create an audio element
-                mediaElement = document.createElement('audio');
-                mediaElement.controls = true; // Add controls (play, pause, etc.)
-                mediaElement.src = basePath + src; // Prepend the file path
-            } else if (['jpg', 'jpeg', 'png', 'gif'].includes(fileExtension)) {
-                // Create an image element
-                mediaElement = document.createElement('img');
-                mediaElement.src = basePath + src; // Prepend the file path
+                if (["mp4", "webm", "ogg"].includes(fileExtension)) {
+                    mediaElement = document.createElement('video');
+                    mediaElement.controls = true;
+                    mediaElement.src = basePath + src;
+                } else if (["mp3", "wav", "ogg"].includes(fileExtension)) {
+                    mediaElement = document.createElement('audio');
+                    mediaElement.controls = true;
+                    mediaElement.src = basePath + src;
+                } else if (["jpg", "jpeg", "png", "gif"].includes(fileExtension)) {
+                    mediaElement = document.createElement('img');
+                    mediaElement.src = basePath + src;
+                }
+                
+                if (mediaElement) {
+                    mediaContainer.appendChild(mediaElement);
+                }
             }
+        });
 
-            if (mediaElement) {
-                mediaContainer.appendChild(mediaElement);
-            }
-        }
-    });
-
-    document.getElementById('memory-modal').style.display = 'flex';
-}
-
-// Function to close memory modal
-function closeMemoryModal() {
-    document.getElementById('memory-modal').style.display = 'none';
-}
-
-function toggleMaximize() {
-    const modal = document.getElementById('memory-modal');
-    const modalContent = modal.querySelector('.memory-modal-content');
-
-    // Toggle "maximized" class on the modal
-    modal.classList.toggle('maximized');
-
-    // Change the button text based on the state
-    const maximizeButton = modal.querySelector('.maximize-modal');
-    if (modal.classList.contains('maximized')) {
-        maximizeButton.textContent = '❐'; // Restore icon
-    } else {
-        maximizeButton.textContent = '⛶'; // Maximize icon
+        document.getElementById('memory-modal').style.display = 'flex';
     }
-}
 
+    function closeMemoryModal() {
+        document.getElementById('memory-modal').style.display = 'none';
+    }
 
+    // Attach close button event
+    document.querySelector('.close-modal').addEventListener('click', closeMemoryModal);
+
+    fetchMemories();
+});
 </script>
 </body>
 

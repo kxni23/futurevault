@@ -1,6 +1,7 @@
 <style>
         header {
             background: #fff;
+            font-family: 'honk';
             color: #333;
             padding: 15px 5%;
             display: flex;
@@ -42,6 +43,7 @@
         nav a {
             text-decoration: none;
             color: #333;
+            font-family: 'honk';
             font-weight: 600;
             font-size: 1em;
             padding: 10px 15px;

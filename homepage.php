@@ -16,6 +16,43 @@ include('api/config.php');
             color: #4a4a4a;
             line-height: 1.6;
         }
+        <?php 
+include('api/config.php');
+?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Future Vault</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Merienda', cursive;
+            background: url('old-paper-texture.jpg') no-repeat center center/cover;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Page Transition Effect */
+        .transition-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #f5e8d4;
+            z-index: 100;
+            transition: opacity 0.8s ease-in-out;
+            opacity: 1;
+        }
+
+        /* Fade-out effect */
+        .transition-overlay.fade-out {
+            opacity: 0;
+            pointer-events: none;
+        }
 
        
 
@@ -158,7 +195,7 @@ include('api/config.php');
             <i class="fas fa-lock"></i>
             Create Vault
         </a>
-        <a href="categofry.php" class="action-icon">
+        <a href="product.php" class="action-icon">
             <i class="fas fa-search"></i>
             Explore 
         </a>

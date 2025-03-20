@@ -10,7 +10,7 @@
       padding: 0;
       box-sizing: border-box;
       flex-direction:column;
-    }
+        }
         body {
             font-family: Arial, sans-serif;
             background: url('./download\ \(1\).jpg') no-repeat center center/cover;
@@ -126,16 +126,18 @@
             display: flex;
         }
         .container {
-            width: 90%;
-            margin: auto;
-            background-color:rgba(255, 255, 255, 0.75);
-            padding: 20px;
-            border-radius: 10px;
-         margin-top:67px;
-            height:500px;
-       
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-        }
+    width: 95%; /* Keeps it wide but not too stretched */
+    max-width: 1200px; /* Prevents excessive width on large screens */
+    margin: auto;
+    background-color: rgba(255, 255, 255, 0.75);
+    padding: 30px; /* Adds spacing inside */
+    border-radius: 10px;
+    margin-top: 50px;
+    min-height: 700px; /* Ensures it has some default height */
+    height: auto; /* Allows it to grow as needed */
+    box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.15);
+}
+
         input, button {
             padding: 10px;
             margin: 5px;
@@ -189,6 +191,7 @@
         <img id="profile-icon" src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Profile Icon">
     </div>
 </header>
+
 <div class="container">
     <h2>Product List</h2>
     <div class="column">
@@ -198,6 +201,8 @@
         <input type="text" id="productPrice">
         <label for="productLink">Product Link:</label>
         <input type="text" id="productLink">
+        <input type="file" id="productPhoto" accept="image/*">
+        <button id="uploadPhotoBtn">Upload Photo</button>
         <button id="addProductBtn">Add Product</button>
     </div>
     <br>
@@ -206,55 +211,63 @@
             <th>Name</th>
             <th>Price</th>
             <th>Link</th>
+            <th>photo</th>
         </tr>
     </table>
 </div>
+
 <script>
     $(document).ready(function () {
-        loadProducts();
+    loadProducts();
 
-        $("#addProductBtn").click(function () {
-            var name = $("#productName").val();
-            var price = $("#productPrice").val();
-            var link = $("#productLink").val();
+    $("#addProductBtn").click(function () {
+        var formData = new FormData();
+        formData.append("action", "add");
+        formData.append("name", $("#productName").val());
+        formData.append("price", $("#productPrice").val());
+        formData.append("link", $("#productLink").val());
+        formData.append("photo", $("#productPhoto")[0].files[0]); // Append file correctly
 
-            if (name && price && link) {
-                $.ajax({
-                    url: "add_product.php",
-                    type: "POST",
-                    data: {
-                        action: "add",
-                        name: name,
-                        price: price,
-                        link: link
-                    },
-                    success: function (response) {
-                        alert(response);
-                        loadProducts();
-                        $("#productName, #productPrice, #productLink").val("");
-                    }
-                });
-            } else {
-                alert("Please fill all fields");
+        $.ajax({
+            url: "api/add_product.php",
+            type: "POST",
+            data: formData,
+            contentType: false, // Required for file uploads
+            processData: false, // Required for file uploads
+            success: function (response) {
+                alert(response);
+                loadProducts();
+                $("#productName, #productPrice, #productLink").val("");
+                $("#productPhoto").val(""); // Clear file input
+            },
+            error: function (xhr, status, error) {
+                console.log("Error: ", error);
             }
         });
     });
+});
 
-    function loadProducts() {
-        $.ajax({
-            url: "add_product.php",
-            type: "GET",
-            success: function (response) {
-                $("#productTable tr:not(:first)").remove();
-                var products = JSON.parse(response);
-                products.forEach(function (product) {
-                    $("#productTable").append(
-                        `<tr><td>${product.name}</td><td>${product.price}</td><td><a href='${product.link}' target='_blank'>View</a></td></tr>`
-                    );
-                });
-            }
-        });
-    }
+function loadProducts() {
+    $.ajax({
+        url: "api/add_product.php",
+        type: "GET",
+        success: function (response) {
+            $("#productTable tr:not(:first)").remove();
+            var products = JSON.parse(response);
+            products.forEach(function (product) {
+                $("#productTable").append(
+                    `<tr>
+                        <td>${product.name}</td>
+                        <td>${product.price}</td>
+                        <td><a href='${product.link}' target='_blank'>View</a></td>
+                        <td><img src='uploads/${product.photo}' alt='Product Image' width='50' height='50'></td>
+                    </tr>`
+                );
+            });
+        }
+    });
+}
+
 </script>
 </body>
 </html>

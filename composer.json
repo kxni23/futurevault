@@ -1,0 +1,15 @@
+{
+    "name": "kanika/futurevault",
+    "autoload": {
+        "psr-4": {
+            "Kanika\\Futurevault\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "kxni23",
+            "email": "kanikakumanan2@gmail.com"
+        }
+    ],
+    "require": {}
+}

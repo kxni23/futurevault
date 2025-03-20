@@ -13,7 +13,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     // Secure SQL query using prepared statements
-    $sql = "SELECT id, username, password FROM sellers WHERE username = ?";
+    $sql = "SELECT seller_id, username, password FROM sellers WHERE username = ?";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("s", $username);
     $stmt->execute();
@@ -26,7 +26,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         // Check password directly (NOT SECURE)
         if ($password === $userInfo["password"]) {
             $_SESSION["logged_in"] = true;
-            $_SESSION["id"] = $userInfo["id"];
+            $_SESSION["seller_id"] = $userInfo["seller_id"];
             $_SESSION["username"] = $userInfo["username"];
 
             // Redirect to seller dashboard

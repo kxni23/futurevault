@@ -9,7 +9,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $business_name = trim($_POST['business_name']);
     $username = trim($_POST['username']);
     $email = trim($_POST['email']);
-    $password = password_hash(trim($_POST['password']), PASSWORD_DEFAULT); // Secure password
+    $password = trim($_POST['password']); // Secure password
     $phone = trim($_POST['phone']);
     $business_address = trim($_POST['business_address']);
     $website_link = trim($_POST['website_link']);

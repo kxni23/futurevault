@@ -35,7 +35,7 @@ include('api/config.php');
 
         .header h1 {
             font-size: 36px;
-            color: #534f52;
+            color:rgb(0, 0, 0);
         }
 
         .section-container {
@@ -48,7 +48,7 @@ include('api/config.php');
 
         .section-container a {
             text-decoration: none;
-            color: #2a27a5;
+            color:rgb(0, 0, 0);
             font-size: 28px;
             font-weight: bold;
             display: block;
@@ -59,7 +59,7 @@ include('api/config.php');
         }
 
         .section-container a:hover {
-            color: #526ac9;
+            color:rgb(13, 13, 13);
         }
        .footer{
         position:relative;
@@ -95,7 +95,7 @@ include('api/config.php');
 
         <!-- Privacy Section -->
         <div class="section-container">
-            <a href="./privacy.html">Privacy Policy</a>
+            <a href="./privacy.php">Privacy Policy</a>
         </div>
 
         <div class="section-container">

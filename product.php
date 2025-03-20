@@ -39,13 +39,6 @@
             color: black;
         }
 
-        .shop-name {
-            font-size: 28px;
-            font-weight: 700;
-            color: #fdbf00;
-            text-transform: uppercase;
-        }
-
         header nav {
             display: flex;
             align-items: center;
@@ -137,38 +130,120 @@
         }
     </style>
 </head>
+<style>
+* {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      flex-direction:column;
+    }
+
+    body {
+      font-family: 'Arial', sans-serif;
+      background: url('./download\ \(1\).jpg') no-repeat center center/cover;
+      color: #333;
+      line-height: 1.6;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+    header {
+            background: #fff;
+            color: #333;
+            padding: 15px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            flex-direction:row;
+
+        }
+
+        .header-left {
+            display: flex;
+            flex-direction: column;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 1.4em;
+            font-weight: bold;
+            letter-spacing: 2px;
+            color: #333;
+        }
+
+        header p {
+            margin: 0;
+            font-size: 0.9em;
+            font-weight: 300;
+            color: #555;
+          
+        }
+
+        nav {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            flex-direction:row;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: #333;
+            font-weight: 600;
+            font-size: 1em;
+            padding: 10px 15px;
+            transition: background 0.3s, color 0.3s ease;
+            border-radius: 5px;
+        }
+
+        nav a:hover {
+            background:rgba(90, 156, 204, 0.71);
+            color: #333;
+        }
+</style>
 <body>
-    <header>
-        <div class="logo">
+<header>
+        <div class="header-left">
             <h1>Future Vault</h1>
+            <p>Preserve Today, Unlock Tomorrow</p>
         </div>
+
+        <!-- Navigation links -->
         <nav>
-            <input type="text" id="searchBar" placeholder="Search for memory gifts..." oninput="displayProducts()">
-            <select id="categoryFilter" onchange="displayProducts()">
-                <option value="all">All Categories</option>
-                <option value="digital">Digital</option>
-                <option value="physical">Physical</option>
-            </select>
+            <a href="homepage.php">HOME</a>
+            <a href="selleracc.php">My Account</a>     
+           
+            
         </nav>
     </header>
+   
     <main>
         <section class="products">
-           
             <div id="productGrid" class="product-grid"></div>
         </section>
     </main>
     <script>
         const exchangeRate = 83; // USD to INR conversion rate
 
-        const products = [
-            { id: 1, name: "Personalized Digital Album", price: 30, image: "album.jpg", category: "digital" },
-            { id: 2, name: "Engraved Music Box", price: 25, image: "music-box.jpg", category: "physical" },
-            { id: 3, name: "Memory Scrapbook", price: 20, image: "scrapbook.jpg", category: "physical" }
-        ];
+        async function fetchProducts() {
+            try {
+                const response = await fetch('api/products.php'); // Fetch data from the backend API
+                const products = await response.json();
+                displayProducts(products);
+            } catch (error) {
+                console.error("Error fetching products:", error);
+            }
+        }
 
-        function displayProducts() {
-            const category = document.getElementById("categoryFilter").value;
-            const searchQuery = document.getElementById("searchBar").value.toLowerCase();
+        function displayProducts(products) {
+            const category = document.getElementById("categoryFilter")?.value || "all";
+            const searchQuery = document.getElementById("searchBar")?.value.toLowerCase() || "";
             const productGrid = document.getElementById("productGrid");
             productGrid.innerHTML = "";
 
@@ -183,21 +258,21 @@
                 const priceInINR = product.price * exchangeRate;
 
                 productCard.innerHTML = `
-                    <img src="${product.image}" alt="${product.name}">
+                    <img src="api/uploads/${product.photo}" alt="${product.photo}">
                     <h3>${product.name}</h3>
                     <div class="price">₹${priceInINR.toLocaleString()}</div>
-                    <button onclick="addToVault(${product.id})">Add to Future Vault</button>
+                    <button onclick="redirectToProduct('${product.link}')">view product</button>
                 `;
 
                 productGrid.appendChild(productCard);
             });
         }
 
-        function addToVault(productId) {
-            alert(`Product ${productId} added to Future Vault!`);
+        function redirectToProduct(productLink) {
+            window.location.href = productLink;
         }
 
-        displayProducts();
+        fetchProducts(); // Fetch and display products on page load
     </script>
 </body>
 </html>

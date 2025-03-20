@@ -2,25 +2,27 @@
 include('api/config.php');
 
 // Debugging: Check if session ID exists
-if (!isset($_SESSION['id']) || empty($_SESSION['id'])) {
+if (!isset($_SESSION['seller_id']) || empty($_SESSION['seller_id'])) {
     echo "<script>alert('Session expired. Please log in again.'); window.location.href='sellerslogin.php';</script>";
     exit;
 }
 
-// Get seller ID securely
-$sellerid = intval($_SESSION['id']);
+    $sellerid = $_SESSION['seller_id'];
+    
 
-if ($sellerid > 0) {
     // Use prepared statement to prevent SQL injection
-    $sql = "SELECT username, email,  password, business_name, website_link,phone FROM sellers WHERE id = ?";
+    $sql = "SELECT username, email,  password, business_name, website_link,phone FROM sellers WHERE seller_id = ?";
     
     $stmt = $conn->prepare($sql);
-    $stmt->bind_param("i", $sellerid);
+    $stmt->bind_param("s", $sellerid);
     $stmt->execute();
     $result = $stmt->get_result();
+  
 
     if ($result->num_rows == 1) {
         $userInfo = $result->fetch_assoc();
+
+        
 
         // Assign values
         $sellername = htmlspecialchars($userInfo['username']);
@@ -34,15 +36,12 @@ if ($sellerid > 0) {
 
         // $joined = htmlspecialchars($userInfo['joined_date']);
     } else {
-        echo "<script>alert('User not found'); window.location.href='loginn.html';</script>";
+        echo "<script>alert('User not found'); window.location.href='sellerslogin.php';</script>";
         exit;
     }
 
     $stmt->close();
-} else {
-    echo "<script>alert('Invalid user session'); window.location.href='loginn.html';</script>";
-    exit;
-}
+
 
 $conn->close();
 ?>
@@ -52,53 +51,102 @@ $conn->close();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Professional Profile</title>
+    <title>Future Vault - Seller Profile</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet" />
     <style>
-        /* General Styles */
         body {
             margin: 0;
             font-family: 'Poppins', sans-serif;
-            background: url('./download.jpg') no-repeat center center/cover;
-            color: rgba(47, 47, 48, 0.8);
-            line-height: 1.6;
+            background: url('./download\ \(1\).jpg') no-repeat center center/cover;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
         }
+
         .container {
-            max-width: 900px;
-            margin: 50px auto;
-            padding: 20px;
-            background: #ffffffcb;
-            border-radius: 12px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            width: 90%;
+            max-width: 700px;
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.2);
+            text-align: center;
         }
+
         .profile img {
             width: 120px;
             height: 120px;
             border-radius: 50%;
             object-fit: cover;
+            border: 4px solid #559ce7;
         }
+
+        .profile h2 {
+            margin: 10px 0;
+            color: #222;
+        }
+
+        .shop-details {
+            margin-top: 20px;
+            background: #f9f9f9;
+            padding: 15px;
+            border-radius: 10px;
+        }
+
         .btn {
-            display: inline-block;
-            padding: 10px 20px;
+            padding: 12px 20px;
             font-size: 1em;
-            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            transition: 0.3s ease;
             border: none;
-            border-radius: 5px;
             cursor: pointer;
         }
-        .btn-primary { background-color: #559ce7; }
-        .btn-primary:hover { background-color: #00419195; }
-        .btn-secondary { background-color: #f4f4f4; color: #333; }
-        .btn-secondary:hover { background-color: #ddd; }
+
+        .btn-primary {
+            background-color: #559ce7;
+            color: white;
+        }
+        .btn-primary:hover {
+            background-color: #004191;
+        }
+
+        .edit-form {
+            display: none;
+            margin-top: 20px;
+            background: #f9f9f9;
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 10px;
+            margin: 8px 0;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        .action-buttons {
+            margin-top: 15px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .account-options a {
+            display: block;
+            margin-top: 10px;
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        .account-options a:hover {
+            text-decoration: underline;
+        }
     </style>
 </head>
 <body>
-
-<header>
-    <h1>Future Vault</h1>
-    <p>Preserve Today, Unlock Tomorrow</p>
-</header>
-
 <div class="container">
     <div class="profile">
         <p><strong>Seller Name:</strong> <?php echo htmlspecialchars($sellername); ?></p>
@@ -113,9 +161,8 @@ $conn->close();
         <p><strong>Phone:</strong> <?php echo nl2br(htmlspecialchars($phone)); ?></p>
     </div>
 
-    <!-- Edit Form -->
     <button class="btn btn-primary" onclick="showEditForm()">Edit Profile</button>
-    <div id="edit-form" class="edit-form" style="display: none;">
+    <div id="edit-form" class="edit-form">
         <form action="api/sellerprofile.php" method="POST" enctype='multipart/form-data'> 
             <input type="hidden" name="sellerid" value="<?php echo $sellerid; ?>">
 
@@ -128,14 +175,11 @@ $conn->close();
             <label for="BusinessName">Business Name</label>
             <input type="text" name="BusinessName" id="BusinessName" value="<?php echo htmlspecialchars($BusinessName); ?>">
 
-            <label for="BusinessType">Business Type</label>
-            <input type="text" name="BusinessType" id="BusinessType" value="<?php echo htmlspecialchars($BusinessType); ?>">
-
             <label for="Website">Website</label>
             <input type="text" name="Website" id="Website" value="<?php echo htmlspecialchars($Website); ?>">
 
-            <label for="About">About</label>
-            <textarea id="About" name="About" rows="3"><?php echo htmlspecialchars($bio); ?></textarea>
+            <!-- <label for="About">About</label>
+            <textarea id="About" name="About" rows="3"><?php echo htmlspecialchars($bio); ?></textarea> -->
 
             <label for="image">Profile Image</label>
             <input type="file" id="image" name="image">
@@ -148,8 +192,8 @@ $conn->close();
     </div>
 
     <div class="account-options">
-        <a href="./changepassword.php">Change Password</a>
-        <a href="./deleteaccount.php">Delete Account</a>
+        <a href="./selchangepass.php">Change Password</a>
+        <a href="./seldeleteacc.php">Delete Account</a>
     </div>
 </div>
 

@@ -10,12 +10,80 @@ include('api/config.php');
     <link @import url('https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap');/>
     <title>Seller Support - Future Vault</title>
     <style>
-        body {
+       * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      flex-direction:column;
+    }
+
+    body {
+      font-family: 'Arial', sans-serif;
+      background: url('./download\ \(1\).jpg') no-repeat center center/cover;
+      color: #333;
+      line-height: 1.6;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+    header {
+            background: #fff;
+            color: #333;
+            padding: 15px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            flex-direction:row;
+
+        }
+
+        .header-left {
+            display: flex;
+            flex-direction: column;
+        }
+
+        header h1 {
             margin: 0;
-            font-family: 'Poppins', sans-serif;
-            background: url('./download\ \(1\).jpg') no-repeat center center/cover;
-            color: #4a4a4a;
-            line-height: 1.6;
+            font-size: 1.4em;
+            font-weight: bold;
+            letter-spacing: 2px;
+            color: #333;
+        }
+
+        header p {
+            margin: 0;
+            font-size: 0.9em;
+            font-weight: 300;
+            color: #555;
+          
+        }
+
+        nav {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            flex-direction:row;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: #333;
+            font-weight: 600;
+            font-size: 1em;
+            padding: 10px 15px;
+            transition: background 0.3s, color 0.3s ease;
+            border-radius: 5px;
+        }
+
+        nav a:hover {
+            background:rgba(90, 156, 204, 0.71);
+            color: #333;
         }
 
         .container {
